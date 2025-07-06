@@ -1,0 +1,207 @@
+:root {
+	--background-start: rgb(4, 8, 16);
+	--background-end: rgb(10, 16, 28);
+	--foreground: #f8fafc;
+	--foreground-muted: #cbd5e1;
+	--accent: #e2e8f0;
+	--border-color: rgba(255, 255, 255, 0.08);
+	--radius: 20px;
+	--shadow-glow: 0 0 20px rgba(255, 255, 255, 0.1);
+	--shadow-text: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+	
+	.glow {
+		filter: blur(15px) !important;
+		opacity: 0.05 !important;
+		transform: none !important;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: "Inter", system-ui, -apple-system, sans-serif;
+	font-feature-settings: "cv11", "ss01";
+	font-optical-sizing: auto;
+	color: var(--foreground);
+	background: linear-gradient(
+			135deg,
+			var(--background-start) 0%,
+			rgba(6, 10, 20, 1) 25%,
+			rgba(8, 14, 24, 1) 50%,
+			rgba(9, 15, 26, 1) 75%,
+			var(--background-end) 100%
+		),
+		url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
+	background-blend-mode: overlay;
+	background-attachment: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100dvh;
+	width: 100dvw;
+	position: relative;
+	overflow: hidden;
+	user-select: none;
+	/* Performance optimizations */
+	contain: layout style;
+	will-change: scroll-position; /* Optimize scrolling */
+	overscroll-behavior: contain; /* Prevent scroll chaining */
+}
+.card {
+	border-radius: var(--radius);
+	padding: 3.5rem 3rem;m;
+	max-width: min(480px, 90dvw);
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+	backdrop-filter: blur(40px) saturate(180%);
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid var(--border-color);
+	z-index: 1;
+	/* Performance optimizations */
+	contain: layout style paint;
+	will-change: auto; /* Remove will-change when not needed */
+}
+.glow {
+	position: absolute;
+	filter: blur(25px);
+	z-index: 0;
+	pointer-events: none;
+	width: var(--w, 800px);
+	height: var(--h, 800px);
+	top: var(--t, 0);
+	left: var(--l, 0);
+	background: var(--bg, rgba(255, 255, 255, 0.1));
+	opacity: var(--o, 0.15);
+	border-radius: 50%;
+	will-change: transform;
+	/* Performance optimizations */
+	contain: layout style paint;
+	transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+}
+
+.error-code {
+	font-size: clamp(3.5rem, 12vw, 6rem);
+	font-weight: 800;
+	color: var(--accent);
+	margin-bottom: 1.5rem;
+	z-index: 1;
+	position: relative;
+	text-shadow: var(--shadow-text);
+	letter-spacing: -0.02em;
+	line-height: 1;
+}
+
+.headline {
+	font-size: clamp(1.5rem, 4.5vw, 2rem);
+	font-weight: 600;
+	margin-bottom: 1.25rem;
+	z-index: 1;
+	position: relative;
+	color: var(--foreground);
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+}
+
+.desc {
+	color: var(--foreground-muted);
+	font-size: clamp(1rem, 3vw, 1.125rem);
+	z-index: 1;
+	position: relative;
+	line-height: 1.6;
+	margin-bottom: 2rem;
+}
+
+#url {
+	display: block;
+	margin-top: 2rem;
+	padding: 1rem;
+	font-size: 0.875rem;
+	color: var(--accent);
+	word-break: break-all;
+	font-weight: 500;
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid var(--border-color);
+	border-radius: 12px;
+	font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+	letter-spacing: 0.02em;
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	padding: 1.5rem 0;
+	text-align: center;
+	z-index: 10;
+	background: linear-gradient(
+			to top,
+			rgba(4, 8, 16, 0.6) 0%,
+			rgba(4, 8, 16, 0.4) 40%,
+			rgba(4, 8, 16, 0.2) 70%,
+			transparent 85%
+		),
+		url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='footerNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23footerNoise)' opacity='0.09'/%3E%3C/svg%3E");
+	background-blend-mode: overlay;
+	backdrop-filter: blur(10px);
+	/* Performance optimization */
+	contain: layout style;
+}
+
+.footer-link {
+	color: var(--foreground-muted);
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	transition: all 0.2s ease;
+	font-size: 0.875rem;
+	font-weight: 500;
+	padding: 0.5rem 1rem;
+	border-radius: 8px;
+	min-height: 44px;
+	min-width: 44px;
+	justify-content: center;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+	color: var(--accent);
+	background: rgba(255, 255, 255, 0.05);
+	transform: translateY(-1px);
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+.github-logo {
+	width: 1.1em;
+	height: 1.1em;
+	fill: currentColor;
+	transition: transform 0.2s ease;
+}
+
+.footer-link:hover .github-logo {
+	transform: scale(1.1);
+}
+
+
